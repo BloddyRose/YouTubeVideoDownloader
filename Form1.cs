@@ -134,10 +134,13 @@ namespace YouTubeVideoDownloader
         {
             descriptionBox.Text = "";
             string path = Directory.GetCurrentDirectory();
-            IEnumerable<string> files = Directory.EnumerateFiles(path, "*.mp4", SearchOption.AllDirectories).Select(Path.GetFileName);
+            string folder = "download";
+
+            string download = Path.Combine(path, folder);
+            IEnumerable<string> files = Directory.EnumerateFiles(download, "*.mp4", SearchOption.AllDirectories).Select(Path.GetFileName);
             foreach (string file in files)
             {
-                descriptionBox.Text = $"New file downloaded in {path} : {file}";
+                descriptionBox.Text = $"New file downloaded in {download} : {file}";
             }
         }
 
