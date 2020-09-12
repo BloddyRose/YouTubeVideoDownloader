@@ -30,9 +30,12 @@ namespace YouTubeVideoDownloader
 
             try
             {
-                descriptionBox.Text = "";
+                descriptionBox.Clear();
 
-                if (!Directory.Exists(@".\tools\download"))
+                if (Directory.Exists(@".\tools\download"))
+                {
+                }
+                else
                 {
                     Directory.CreateDirectory(@".\tools\download");
                 }
@@ -87,7 +90,10 @@ namespace YouTubeVideoDownloader
 
                 string output = Path.Combine(path, foldername);
 
-                if (!Directory.Exists(output))
+                if (Directory.Exists(output))
+                {
+                }
+                else
                 {
                     Directory.CreateDirectory(output);
                 }
@@ -103,13 +109,28 @@ namespace YouTubeVideoDownloader
                 };
                 webClient.DownloadFileCompleted += (s, ea) =>
                 {
-                    progressbar.Visible = false;
+                    progressbar.Value = 0;
                     panel1.Visible = false;
                     panel1.Hide();
                     // any other code to process the file
                 };
                 webClient.DownloadFileAsync(new Uri("https://youtube-dl.org/downloads/latest/youtube-dl.exe"),
                     @".\tools\youtube-dl.exe");
+                if (progressbar.Value == 50)
+                {
+                    descriptionBox.Clear();
+                    descriptionBox.Text = "Almost Downloaded";
+                }
+                else if (progressbar.Value == 1)
+                {
+                    descriptionBox.Clear();
+                    descriptionBox.Text = "Starting Download Down will be a progress bar";
+                }
+                else if (progressbar.Value == 100)
+                {
+                    descriptionBox.Clear();
+                    descriptionBox.Text = "Finished Download";
+                }
             }
             catch (Exception Ex)
             {
@@ -151,7 +172,7 @@ namespace YouTubeVideoDownloader
 
             try
             {
-                descriptionBox.Text = "";
+                descriptionBox.Clear();
 
                 string path = Directory.GetCurrentDirectory();
                 IEnumerable<string> files = Directory.EnumerateFiles(path, "*.mp4", SearchOption.AllDirectories).Select(Path.GetFileName);
@@ -191,8 +212,10 @@ namespace YouTubeVideoDownloader
         #region Others
         private void Form1_Load(object sender, EventArgs e)
         {
+            descriptionBox.Clear();
             panel1.Visible = false;
             panel1.Hide();
+            Application.EnableVisualStyles();
         }
       
         private void button3_Click(object sender, EventArgs e)
@@ -203,6 +226,7 @@ namespace YouTubeVideoDownloader
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
+            descriptionBox.Clear();
             Dispose();
             Application.Exit();
         }
@@ -229,15 +253,31 @@ namespace YouTubeVideoDownloader
                 webClient.DownloadProgressChanged += (s, ea) =>
                 {
                     progressbar.Value = ea.ProgressPercentage;
+
                 };
                 webClient.DownloadFileCompleted += (s, ea) =>
                 {
-                    progressbar.Visible = false;
+                    progressbar.Value = 0;
                     panel1.Visible = false;
                     panel1.Hide();
                 };
                 webClient.DownloadFileAsync(new Uri(url),
                     @".\tools\Converter.exe");
+                if (progressbar.Value == 50)
+                {
+                    descriptionBox.Clear();
+                    descriptionBox.Text = "Almost Downloaded";
+                }
+                else if (progressbar.Value == 1)
+                {
+                    descriptionBox.Clear();
+                    descriptionBox.Text = "Starting Download Down will be a progress bar";
+                }
+                else if (progressbar.Value == 100)
+                {
+                    descriptionBox.Clear();
+                    descriptionBox.Text = "Finished Download";
+                }
             }
             catch (Exception Ex)
             {
