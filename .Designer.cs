@@ -40,6 +40,7 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.progressbar = new System.Windows.Forms.ProgressBar();
             this.button4 = new System.Windows.Forms.Button();
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -103,10 +104,10 @@
             // 
             // descriptionBox
             // 
-            this.descriptionBox.Location = new System.Drawing.Point(12, 56);
+            this.descriptionBox.Location = new System.Drawing.Point(8, 69);
             this.descriptionBox.Name = "descriptionBox";
             this.descriptionBox.ReadOnly = true;
-            this.descriptionBox.Size = new System.Drawing.Size(400, 165);
+            this.descriptionBox.Size = new System.Drawing.Size(400, 145);
             this.descriptionBox.TabIndex = 8;
             this.descriptionBox.Text = "";
             // 
@@ -123,7 +124,7 @@
             // panel1
             // 
             this.panel1.Controls.Add(this.progressbar);
-            this.panel1.Location = new System.Drawing.Point(12, 186);
+            this.panel1.Location = new System.Drawing.Point(8, 179);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(400, 35);
             this.panel1.TabIndex = 10;
@@ -145,11 +146,23 @@
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
+            // linkLabel1
+            // 
+            this.linkLabel1.AutoSize = true;
+            this.linkLabel1.Location = new System.Drawing.Point(9, 53);
+            this.linkLabel1.Name = "linkLabel1";
+            this.linkLabel1.Size = new System.Drawing.Size(214, 13);
+            this.linkLabel1.TabIndex = 12;
+            this.linkLabel1.TabStop = true;
+            this.linkLabel1.Text = "Press here to go to your downloaded videos";
+            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(420, 259);
+            this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.button5);
@@ -187,6 +200,7 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.ProgressBar progressbar;
         private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.LinkLabel linkLabel1;
     }
 }
 

@@ -1,11 +1,17 @@
-﻿using System;
+﻿/*
+ * Maded by BloddyRose 
+ * Thanks to youtube-dl
+ * Just a software to download youtube videos
+ */
+#region Main
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Windows.Forms;
-
 namespace YouTubeVideoDownloader
 {
     public partial class Form1 : Form
@@ -32,18 +38,10 @@ namespace YouTubeVideoDownloader
             {
                 descriptionBox.Clear();
 
-                if (Directory.Exists(@".\tools\download"))
-                {
-                }
-                else
-                {
-                    Directory.CreateDirectory(@".\tools\download");
-                }
-
 
                 myProcess.StartInfo.FileName = @".\tools\youtube-dl.exe";
 
-                myProcess.StartInfo.Arguments = " --abort-on-error " +  linkInput.Text;
+                myProcess.StartInfo.Arguments = " --abort-on-error " + linkInput.Text;
 
                 myProcess.Start();
                 descriptionBox.Text = myProcess.StandardOutput.ReadToEnd().ToString();
@@ -78,7 +76,7 @@ namespace YouTubeVideoDownloader
                 MessageBox.Show("Erorr happend " + ex.Message, "Erorr", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-#endregion
+        #endregion
         #region Download Youtube-dl
 
         private void button1_Click(object sender, EventArgs e)
@@ -205,7 +203,7 @@ namespace YouTubeVideoDownloader
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Erorr : "+ ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Erorr : " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         #endregion
@@ -217,7 +215,7 @@ namespace YouTubeVideoDownloader
             panel1.Hide();
             Application.EnableVisualStyles();
         }
-      
+
         private void button3_Click(object sender, EventArgs e)
         {
             Form2 form2 = new Form2();
@@ -286,5 +284,18 @@ namespace YouTubeVideoDownloader
             }
         }
         #endregion
+        #region OpenExplorer On Download Folder
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Directory.CreateDirectory("download");
+            string path = Directory.GetCurrentDirectory();
+            string folder = "download";
+
+            string full_path = Path.Combine(path, folder);
+            Process.Start("explorer.exe", full_path);
+        }
+        #endregion
     }
 }
+#endregion 
