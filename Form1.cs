@@ -22,6 +22,7 @@ namespace YouTubeVideoDownloader
             myProcess.StartInfo.RedirectStandardError = true;
             descriptionBox.Text = "";
         }
+        #region GetVideo
 
         private void getLink_Click(object sender, EventArgs e)
         {
@@ -30,34 +31,52 @@ namespace YouTubeVideoDownloader
             try
             {
                 descriptionBox.Text = "";
-                string path = Directory.GetCurrentDirectory();
-                string foldername = "download";
 
-
-
-                if (!Directory.Exists(path + foldername))
+                if (!Directory.Exists(@".\tools\download"))
                 {
-                    Directory.CreateDirectory(path + foldername);
+                    Directory.CreateDirectory(@".\tools\download");
                 }
-
-                string outout = Path.Combine(path, foldername);
 
 
                 myProcess.StartInfo.FileName = @".\tools\youtube-dl.exe";
 
-                myProcess.StartInfo.Arguments = $"-o {outout}" + linkInput.Text;
+                myProcess.StartInfo.Arguments = " --abort-on-error " +  linkInput.Text;
 
                 myProcess.Start();
                 descriptionBox.Text = myProcess.StandardOutput.ReadToEnd().ToString();
 
                 myProcess.WaitForExit();
+                string files_folder = Directory.CreateDirectory("download").FullName;
+
+                string folder = Environment.CurrentDirectory;
+
+
+                string[] items = System.IO.Directory.GetFiles(folder, "*.mp4", System.IO.SearchOption.TopDirectoryOnly);
+                foreach (string filePath in items)
+                {
+                    string newFile = System.IO.Path.Combine(files_folder, System.IO.Path.GetFileName(filePath));
+                    if (File.Exists(newFile))
+                    {
+                        MessageBox.Show("File already exists!!\n Overwriting!", "Exists", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        // File.Delete(file);
+                        descriptionBox.Text = $"File {Path.GetFileName(filePath)} moved in {newFile}\n";
+                        File.Delete(filePath);
+                        continue;
+                    }
+
+                    File.Move(filePath, newFile);
+
+                }
+
 
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                MessageBox.Show("Erorr happend " + ex.Message, "Erorr", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+#endregion
+        #region Download Youtube-dl
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -100,6 +119,8 @@ namespace YouTubeVideoDownloader
 
 
         }
+        #endregion
+        #region Update Youtube-dl
 
         private void button5_Click(object sender, EventArgs e)
         {
@@ -123,27 +144,57 @@ namespace YouTubeVideoDownloader
                 MessageBox.Show($"Error Happended : {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+        #endregion
+        #region Log Area
+        private void button2_Click(object sender, EventArgs e)
+        {
 
+            try
+            {
+                descriptionBox.Text = "";
+
+                string path = Directory.GetCurrentDirectory();
+                IEnumerable<string> files = Directory.EnumerateFiles(path, "*.mp4", SearchOption.AllDirectories).Select(Path.GetFileName);
+                foreach (string file in files)
+                {
+                    descriptionBox.Text = $"New file downloaded : {file}\n";
+                }
+
+                string files_folder = Directory.CreateDirectory("download").FullName;
+
+                string folder = Environment.CurrentDirectory;
+
+
+                string[] items = System.IO.Directory.GetFiles(folder, "*.mp4", System.IO.SearchOption.TopDirectoryOnly);
+                foreach (string filePath in items)
+                {
+                    string newFile = System.IO.Path.Combine(files_folder, System.IO.Path.GetFileName(filePath));
+                    if (File.Exists(newFile))
+                    {
+                        MessageBox.Show("File already exists!!\n Overwriting!", "Exists", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        // File.Delete(file);
+                        descriptionBox.Text = $"File {Path.GetFileName(filePath)} moved in {newFile}\n";
+                        File.Delete(filePath);
+                        continue;
+                    }
+
+                    File.Move(filePath, newFile);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erorr : "+ ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        #endregion
+        #region Others
         private void Form1_Load(object sender, EventArgs e)
         {
             panel1.Visible = false;
             panel1.Hide();
         }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            descriptionBox.Text = "";
-            string path = Directory.GetCurrentDirectory();
-            string folder = "download";
-
-            string download = Path.Combine(path, folder);
-            IEnumerable<string> files = Directory.EnumerateFiles(download, "*.mp4", SearchOption.AllDirectories).Select(Path.GetFileName);
-            foreach (string file in files)
-            {
-                descriptionBox.Text = $"New file downloaded in {download} : {file}";
-            }
-        }
-
+      
         private void button3_Click(object sender, EventArgs e)
         {
             Form2 form2 = new Form2();
@@ -153,6 +204,47 @@ namespace YouTubeVideoDownloader
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             Dispose();
+            Application.Exit();
         }
+        #endregion
+        #region Download Converter
+        private void button4_Click(object sender, EventArgs e)
+        {
+            string url = @"https://github.com/BloddyRose/Converter/releases/download/2.0/Converter.exe";
+            try
+            {
+                string path = Directory.GetCurrentDirectory();
+                string foldername = "tools";
+
+                string output = Path.Combine(path, foldername);
+
+                if (!Directory.Exists(output))
+                {
+                    Directory.CreateDirectory(output);
+                }
+
+                WebClient webClient = new WebClient();
+                panel1.Visible = true;
+                panel1.Show();
+                webClient.DownloadProgressChanged += (s, ea) =>
+                {
+                    progressbar.Value = ea.ProgressPercentage;
+                };
+                webClient.DownloadFileCompleted += (s, ea) =>
+                {
+                    progressbar.Visible = false;
+                    panel1.Visible = false;
+                    panel1.Hide();
+                };
+                webClient.DownloadFileAsync(new Uri(url),
+                    @".\tools\Converter.exe");
+            }
+            catch (Exception Ex)
+            {
+
+                MessageBox.Show($"Erorr Happend : {Ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        #endregion
     }
 }
