@@ -232,7 +232,7 @@ namespace YouTubeVideoDownloader
         #region Download Converter
         private void button4_Click(object sender, EventArgs e)
         {
-            string url = @"https://github.com/BloddyRose/Converter/releases/download/2.0/Converter.exe";
+            string url = @"https://github.com/BloddyRose/Converter/releases/download/v2.0/ConverterSetup.msi";
             try
             {
                 string path = Directory.GetCurrentDirectory();
@@ -260,7 +260,7 @@ namespace YouTubeVideoDownloader
                     panel1.Hide();
                 };
                 webClient.DownloadFileAsync(new Uri(url),
-                    @".\tools\Converter.exe");
+                    @".\tools\ConverterSetup.msi");
                 if (progressbar.Value == 50)
                 {
                     descriptionBox.Clear();
